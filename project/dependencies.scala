@@ -1,45 +1,46 @@
 import sbt._
 
 object Versions {
-  val enumeratum = "1.6.1"
-  val http4s     = "0.21.23"
-  val refined    = "0.9.25"
-  val tapir      = "0.18.0-M11"
-  val zio        = "1.0.8"
-  val zioJson    = "0.1.5"
+  val cats = "2.6.1"
+  val catsEffect = "3.2.7"
+  val catsEffectTesting = "1.3.0"
+  val circe = "0.14.1"
+  val flyway = "7.15.0"
+  val http4s = "0.23.3"
+  val newtypes = "0.0.1"
+  val scalaTest = "3.2.9"
+  val skunk = "0.2.2"
+  val tapir = "0.19.0-M8"
 }
 
 object Libraries {
-  def tapir(artifactName: String): ModuleID =
-    "com.softwaremill.sttp.tapir" %% s"tapir-$artifactName" % Versions.tapir
+  val cats = "org.typelevel" %% "cats-core" % Versions.cats
+  val catsEffect = "org.typelevel" %% "cats-effect" % Versions.catsEffect
 
-  def http4s(artifactName: String): ModuleID =
-    "org.http4s" %% s"http4s-$artifactName" % Versions.http4s
+  val circe = List(
+    "io.circe" %% "circe-core",
+    "io.circe" %% "circe-parser",
+    "io.circe" %% "circe-generic"
+  ).map(_ % Versions.circe)
 
-  // Zio
-  val zio = "dev.zio" %% "zio" % Versions.zio
+  val flyway = "org.flywaydb" % "flyway-core" % Versions.flyway
+  
+  val http4s = List(
+    "org.http4s" %% "http4s-dsl",
+    "org.http4s" %% "http4s-circe",
+    "org.http4s" %% "http4s-blaze-server"
+  ).map(_ % Versions.http4s)
 
-  // Json
-  val zioJson = "dev.zio" %% "zio-json" % Versions.zioJson
+  val newtypes = "io.monix" %% "newtypes-core" % Versions.newtypes
 
-  // Tapir
-  val tapirCore       = tapir("core")
-  val tapirEnumeratum = tapir("enumeratum")
-  val tapirRefined    = tapir("refined")
-  val tapirZio        = tapir("zio")
-  val tapirZioHttp4s  = tapir("zio-http4s-server")
-  val tapirZioJson    = tapir("json-zio")
+  val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
+  val catsEffectTesting = "org.typelevel" %% "cats-effect-testing-scalatest" % Versions.catsEffectTesting % Test
 
-  // Enumeratum
-  val enumeratum = "com.beachape" %% "enumeratum" % Versions.enumeratum
+  val skunk = "org.tpolecat" %% "skunk-core" % Versions.skunk
 
-  // Refined
-  val refined = "eu.timepit" %% "refined" % Versions.refined
-
-  // Http4s
-  val http4sDsl    = http4s("dsl")
-  val http4sServer = http4s("blaze-server")
-
-  // Test
-  val zioTest = "dev.zio" %% "zio-test" % Versions.zio % Test
+  val tapir = List(
+    "com.softwaremill.sttp.tapir" %% "tapir-core",
+    "com.softwaremill.sttp.tapir" %% "tapir-json-circe",
+    "com.softwaremill.sttp.tapir" %% "tapir-http4s-server"
+  ).map(_ % Versions.tapir)
 }
