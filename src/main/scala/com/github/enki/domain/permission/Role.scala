@@ -2,12 +2,16 @@ package com.github.enki
 package domain
 package permission
 
-type Role       = RoleF[State.Get]
-type CreateRole = RoleF[State.Create]
+import util.hkd.*
+
+type Role       = RoleF[Entity]
+type CreateRole = RoleF[Create]
+type UpdateRole = RoleF[Update]
+type FilterRole = RoleF[Filter]
 
 final case class RoleF[S <: State](
-  id:          Field[Id, S],
-  name:        Field[String, S],
-  default:     Field[Boolean, S],
-  permissions: Field[List[PermissionF[S]], S]
-) extends EntityF[RoleF, S]
+  id:          Field[S, Required, Generated *: Immutable *: End, Id                  ],
+  name:        Field[S, Required,                           End, String              ],
+  default:     Field[S, Required,              Immutable *: End, Boolean             ],
+  permissions: Field[S, Required,                           End, List[PermissionF[S]]]
+) extends EntityF[S]

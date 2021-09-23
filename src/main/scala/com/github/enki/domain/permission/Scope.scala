@@ -7,13 +7,13 @@ import util.enums.*
 import doobie.Meta
 import doobie.postgres.implicits.pgEnumString
 
-enum PermissionType extends SnakeCase:
+enum Scope extends SnakeCase:
   case Workspace, Project
 
-object PermissionType:
-  given Meta[PermissionType] = 
+object Scope:
+  given Meta[Scope] = 
     pgEnumString(
-      "permission_type", 
-      snake2camel andThen PermissionType.valueOf, 
+      "scope", 
+      snake2camel andThen Scope.valueOf, 
       _.toString
     )

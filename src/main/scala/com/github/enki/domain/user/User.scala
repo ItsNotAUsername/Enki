@@ -2,19 +2,23 @@ package com.github.enki
 package domain
 package user
 
+import util.hkd.*
+
 import java.time.LocalDateTime
 import java.util.UUID
 
-type User       = UserF[State.Get]
-type CreateUser = UserF[State.Create]
+type User       = UserF[Entity]
+type CreateUser = UserF[Create]
+type UpdateUser = UserF[Update]
+type FilterUser = UserF[Filter]
 
 final case class UserF[S <: State](
-  id:       Field[Id, S],
-  username: Field[String, S],
-  email:    Field[String, S],
-  password: Field[String, S],
-  active:   Field[Boolean, S],
-  code:     Field[UUID, S],
-  created:  Field[LocalDateTime, S],
-  updated:  Field[LocalDateTime, S]
-) extends EntityF[UserF, S]
+  id:       Field[S, Required, Generated *: Immutable *: End, Id           ],
+  username: Field[S, Required,                           End, String       ],
+  email:    Field[S, Required,                           End, String       ],
+  password: Field[S, Required,                           End, String       ],
+  active:   Field[S, Required,                           End, String       ],
+  code:     Field[S, Required,              Immutable *: End, UUID         ],
+  created:  Field[S, Required,              Immutable *: End, LocalDateTime],
+  updated:  Field[S, Required,                           End, LocalDateTime]
+) extends EntityF[S]
