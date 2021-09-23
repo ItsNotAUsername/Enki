@@ -17,7 +17,7 @@ final case class UserF[S <: State](
   username: Field[S, Required,                           End, String       ],
   email:    Field[S, Required,                           End, String       ],
   password: Field[S, Required,                           End, String       ],
-  active:   Field[S, Required,                           End, String       ],
+  active:   Field[S, Required,                           End, Boolean      ],
   code:     Field[S, Required,              Immutable *: End, UUID         ],
   created:  Field[S, Required,              Immutable *: End, LocalDateTime],
   updated:  Field[S, Required,                           End, LocalDateTime]
