@@ -10,7 +10,6 @@ import util.typeclass.{GenUUID, Time}
 
 import cats.effect.{IO, Resource}
 import cats.syntax.option.*
-import munit.CatsEffectSuite
 import java.time.LocalDateTime
 import java.util.UUID
 

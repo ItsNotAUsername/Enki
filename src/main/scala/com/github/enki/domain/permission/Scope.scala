@@ -13,7 +13,7 @@ enum Scope extends SnakeCase:
 object Scope:
   given Meta[Scope] = 
     pgEnumString(
-      "scope", 
+      "permission_scope", 
       snake2camel andThen Scope.valueOf, 
       _.toString
     )
