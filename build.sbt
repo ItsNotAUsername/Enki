@@ -5,7 +5,7 @@ ThisBuild / scalaVersion := "3.1.0-RC2"
 ThisBuild / version      := "0.1.0"
 
 lazy val dependencies = 
-  List(cats, catsEffect, clearConfig, flyway, munit, refined, tsec) ++ 
+  List(cats, catsEffect, flyway, munit, pureConfig, refined, tsec) ++ 
     circe ++ doobie ++ http4s ++ monocle ++ tapir
 
 lazy val root = (project in file("."))
