@@ -2,7 +2,7 @@ package com.github.enki
 package repository
 
 import domain.Id
-import domain.permission.*
+import domain.permission.Permission
 import persistence.repository.impl.LivePermissionRepository
 
 import cats.effect.{IO, Resource}
@@ -18,7 +18,7 @@ class PermissionRepositorySpec extends DBSuite:
 
   test("call findPermissionById should return Some(perm) if permission with given id exists") {
     permissionRepo().findPermissionById(Id(1))
-      .map(_.get.name)
+      .map(_.get.name.value)
       .assertEquals("create_project")
   }
 

@@ -4,7 +4,7 @@ package repository
 package impl
 
 import domain.Id
-import domain.permission.*
+import domain.permission.Permission
 
 import cats.effect.MonadCancelThrow
 import doobie.*
@@ -13,7 +13,7 @@ import doobie.implicits.*
 class LivePermissionRepository[F[_]: MonadCancelThrow](xa: Transactor[F]) extends PermissionRepository[F]:
   import query.PermissionQuery
 
-  def findPermissionById(id: Id): F[Option[Permission]] =
+  def findPermissionById(id: Id[Permission]): F[Option[Permission]] =
     PermissionQuery.selectById(id)
       .option
       .transact(xa)

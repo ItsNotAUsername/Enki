@@ -1,11 +1,9 @@
 package com.github.enki
 package repository
 
-import domain.Id
-import domain.user.*
+import domain.*
+import domain.user.User
 import persistence.repository.impl.LiveUserRepository
-import util.hkd.*
-import util.hkd.UpdateField.*
 import util.typeclass.{GenUUID, Time}
 
 import cats.effect.{IO, Resource}
@@ -26,11 +24,11 @@ class UserRepositorySpec extends DBSuite:
     val action = for
       now    <- Time[IO].localDateTime
       code   <- GenUUID[IO].uuid
-      create  = UserF[Create](
-                  Skipped,
-                  "Zhora",
-                  "zhora@gmail.com",
-                  "pAsSwOrD",
+      create  = User(
+                  Id.undefined,
+                  Username("Zhora"),
+                  Email("zhora@gmail.com"),
+                  HashedPassword("pAsSwOrD"),
                   false,
                   code,
                   now,
@@ -41,7 +39,7 @@ class UserRepositorySpec extends DBSuite:
     yield mbUser
 
     action
-      .map(_.get.username)
+      .map(_.get.username.value)
       .assertEquals("Zhora")
   }
 
@@ -49,29 +47,29 @@ class UserRepositorySpec extends DBSuite:
     val action = for
       now     <- Time[IO].localDateTime
       code    <- GenUUID[IO].uuid
-      user     = UserF[Update](
-                   Skipped,
-                   None,
-                   None,
-                   UpdateSingle("MORE PAWAH").some,
-                   none,
-                   Skipped,
-                   Skipped,
-                   UpdateSingle(now).some
+      user     = User(
+                   Id(2),
+                   Username("Sasha"),
+                   Email("sasha@gmail.com"),
+                   HashedPassword("MORE PAWAH"),
+                   true,
+                   code,
+                   now,
+                   now
                  )
-      _       <- userRepo().updateUser(Id(2), user)
+      _       <- userRepo().updateUser(user)
       updated <- userRepo().findUserById(Id(2))
     yield updated
 
     action
-      .map(_.get.password)
+      .map(_.get.password.value)
       .assertEquals("MORE PAWAH")
   }
 
   test("call findUserById should return Some(user) if user with given id exists") {
     userRepo()
       .findUserById(Id(1))
-      .map(_.get.username)
+      .map(_.get.username.value)
       .assertEquals("Nikita")
   }
 
@@ -84,14 +82,14 @@ class UserRepositorySpec extends DBSuite:
 
   test("call findUserByEmail should return Some(user) if user with given email exists") {
     userRepo()
-      .findUserByEmail("nikita@yandex.com")
-      .map(_.get.username)
+      .findUserByEmail(Email("nikita@yandex.com"))
+      .map(_.get.username.value)
       .assertEquals("Nikita")
   }
 
   test("call findUserByEmail should return None if user with given email doesn't exist") {
     userRepo()
-      .findUserByEmail("abc@def.ru")
+      .findUserByEmail(Email("abc@def.ru"))
       .map(_.isEmpty)
       .assert
   }
@@ -99,7 +97,7 @@ class UserRepositorySpec extends DBSuite:
   test("call findUserByCode should return Some(user) if user with given code exists") {
     userRepo()
       .findUserByCode(UUID.fromString("9e057b2a-a9f4-4e7c-b62a-4a62e8e3243e"))
-      .map(_.get.username)
+      .map(_.get.username.value)
       .assertEquals("Nikita")
   }
 

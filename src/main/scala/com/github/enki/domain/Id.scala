@@ -1,24 +1,27 @@
 package com.github.enki
 package domain
 
-import doobie.{Get, Put}
-
-final case class Id private(value: Long) extends AnyVal
+type Id[+T] = Id.Type[T]
 
 object Id:
+  opaque type Type[+T] = Long
 
-  private val errorMsg = "Id must be positive integer!"
+  extension [T](t: Type[T])
+    def value: Long = t
 
-  def apply(value: Long): Id = unsafeFrom(value)
+  private val errorMsg: String = "Id must be positive integer"
 
-  def from(value: Long): Either[String, Id] =
-    Either.cond(value > 0, new Id(value), errorMsg)
+  private def validate(value: Long): Boolean = value > 0
 
-  def unsafeFrom(value: Long): Id = 
-    if value > 0 then new Id(value)
+  val undefined: Type[Nothing] = 0
+
+  def apply[T](value: Long): Type[T] = unsafeFrom(value)
+
+  def from[T](value: Long): Either[String, Type[T]] =
+    Either.cond(validate(value), value, errorMsg)
+
+  def unsafeFrom[T](value: Long): Type[T] = 
+    if validate(value) then value
     else throw new IllegalArgumentException(errorMsg)
-
-  given get4id: Get[Id] = Get[Long].temap(from)
-  given put4id: Put[Id] = Put[Long].tcontramap(_.value)
 
 end Id

@@ -3,12 +3,12 @@ package persistence
 package repository
 package impl
 
-import domain.Id
-import domain.user.*
+import domain.{Email, Id}
+import domain.user.User
+import meta.given
 
 import cats.effect.MonadCancelThrow
 import cats.syntax.functor.*
-import cats.syntax.option.*
 import doobie.*
 import doobie.implicits.*
 import doobie.postgres.implicits.*
@@ -17,25 +17,24 @@ import java.util.UUID
 class LiveUserRepository[F[_]: MonadCancelThrow](xa: Transactor[F]) extends UserRepository[F]:
   import query.UserQuery
   
-  def createUser(user: CreateUser): F[User] =
+  def createUser(user: User): F[User] =
     UserQuery.insertUser(user)
-      .withUniqueGeneratedKeys[User](
-        "id", "username", "email", "password", "active", "code", "created", "updated"
-      )
+      .withUniqueGeneratedKeys[Id[User]]("id")
       .transact(xa)
+      .map(userId => user.copy(id = userId))
   
-  def updateUser(userId: Id, user: UpdateUser): F[Unit] =
-    UserQuery.updateUser(userId, user)
+  def updateUser(user: User): F[User] =
+    UserQuery.updateUser(user)
       .run
       .transact(xa)
-      .void
+      .as(user)
   
-  def findUserById(userId: Id): F[Option[User]] =
+  def findUserById(userId: Id[User]): F[Option[User]] =
     UserQuery.selectUserById(userId)
       .option
       .transact(xa)
   
-  def findUserByEmail(email: String): F[Option[User]] =
+  def findUserByEmail(email: Email): F[Option[User]] =
     UserQuery.selectUserByEmail(email)
       .option
       .transact(xa)

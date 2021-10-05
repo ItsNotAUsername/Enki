@@ -3,8 +3,8 @@ package persistence
 package repository
 
 import domain.Id
-import domain.permission.*
+import domain.permission.Permission
 
 trait PermissionRepository[F[_]]:
-  def findPermissionById(id: Id): F[Option[Permission]]
+  def findPermissionById(id: Id[Permission]): F[Option[Permission]]
   def findAllPermissions: F[List[Permission]]

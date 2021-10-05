@@ -35,12 +35,12 @@ trait DBSuite extends CatsEffectSuite:
 
   private def dropTables(xa: Transactor[IO]): IO[Unit] =
     sql"""
-      DROP TABLE IF EXISTS usr, permission; 
+      DROP TABLE IF EXISTS usr, permission, role, role_permission; 
       DROP type permission_scope;
       DROP type    member_status;
-      """.update
-        .run
-        .transact(xa)
-        .void
+    """.update
+      .run
+      .transact(xa)
+      .void
 
 end DBSuite

@@ -27,3 +27,27 @@ INSERT INTO permission (name, scope)
      VALUES ('create_project', 'workspace'),
             ('create_ticket', 'project');
 
+CREATE TABLE role (
+  id     BIGSERIAL   NOT NULL PRIMARY KEY,
+  name   VARCHAR(31) NOT NULL,
+  system BOOLEAN     NOT NULL
+);
+
+INSERT INTO role (name, system)
+     VALUES ('admin', true),
+            ('custom_role', false);
+
+CREATE TABLE role_permission (
+  role_id       BIGINT NOT NULL,
+  permission_id BIGINT NOT NULL,
+
+  PRIMARY KEY (role_id, permission_id),
+  
+  FOREIGN KEY (role_id)       REFERENCES       role (id) ON DELETE CASCADE,
+  FOREIGN KEY (permission_id) REFERENCES permission (id)
+);
+
+INSERT INTO role_permission (role_id, permission_id)
+     VALUES (1, 1),
+            (1, 2),
+            (2, 2);
