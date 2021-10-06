@@ -9,30 +9,28 @@ import meta.given
 import doobie.*
 import doobie.implicits.*
 import doobie.postgres.implicits.*
+import doobie.util.fragments.whereAnd
 import java.util.UUID
 
 private[persistence] object UserQuery:
 
-  def selectUserById(id: Id[User]): Query0[User] =
-    sql"""
+  private val selectFragment = 
+    fr"""
       SELECT u.id, u.username, u.email, u.password, u.active, u.code, u.created, u.updated
         FROM usr u
-       WHERE u.id = $id
-    """.query[User]
+    """
+
+  def selectUserById(id: Id[User]): Query0[User] =
+    (selectFragment ++ whereAnd(fr"u.id = $id"))
+      .query[User]
 
   def selectUserByEmail(email: Email): Query0[User] =
-    sql"""
-      SELECT u.id, u.username, u.email, u.password, u.active, u.code, u.created, u.updated
-        FROM usr u
-       WHERE u.email = $email
-    """.query[User]
+    (selectFragment ++ whereAnd(fr"u.email = $email"))
+      .query[User]
 
   def selectUserByCode(code: UUID): Query0[User] =
-    sql"""
-      SELECT u.id, u.username, u.email, u.password, u.active, u.code, u.created, u.updated
-        FROM usr u
-       WHERE u.code = $code
-    """.query[User]
+    (selectFragment ++ whereAnd(fr"u.code = $code"))
+      .query[User]
 
   def insertUser(user: User): Update0 =
     sql"""
