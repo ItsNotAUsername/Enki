@@ -4,6 +4,7 @@ package project
 
 import workspace.{Member, Workspace}
 
+import cats.data.NonEmptyList
 import java.time.LocalDateTime
 
 final case class Project(
@@ -12,7 +13,7 @@ final case class Project(
   name:        ProjectName,
   description: ProjectDescription,
   lead:        Member,
-  members:     List[Member],
+  members:     NonEmptyList[Member],
   created:     LocalDateTime,
   updated:     LocalDateTime
 )

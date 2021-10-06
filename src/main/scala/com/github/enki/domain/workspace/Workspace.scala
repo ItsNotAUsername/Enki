@@ -4,13 +4,14 @@ package workspace
 
 import permission.RoleScheme
 
+import cats.data.NonEmptyList
 import java.time.LocalDateTime
 
 final case class Workspace(
   id:         Id[Workspace],
   name:       WorkspaceName,
   owner:      Member,
-  members:    List[Member],
+  members:    NonEmptyList[Member],
   roleScheme: RoleScheme,
   created:    LocalDateTime,
   updated:    LocalDateTime
