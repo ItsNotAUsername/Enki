@@ -5,8 +5,9 @@ package query
 import domain.{Id, Pagination, RoleName}
 import domain.permission.{Permission, Role, Scope}
 import domain.workspace.Workspace
-import meta.given
 import filter.RoleFilter
+import meta.given
+import model.RoleRow
 
 import cats.data.NonEmptyList
 import doobie.*
@@ -15,80 +16,40 @@ import doobie.util.fragments.{in, whereAnd}
 
 private[persistence] object RoleQuery:
 
-  private val selectRoleFragment = 
-    fr"""
-      SELECT r.id, r.name, r.system, r.workspace_id
-        FROM role r
-    """
+  private val selectRoleFragment = fr"""
+    SELECT r.id, r.name, r.system, r.workspace_id
+      FROM role r
+  """
 
-  private val selectRolePermissionsFragment =
-    fr"""
-      SELECT p.id, p.name, p.scope
-        FROM permission p
-    """
-
-  def selectRoleRowById(roleId: Id[Role]): ConnectionIO[Option[RoleRow]] =
-    (selectRoleFragment ++ whereAnd(fr"r.id = $roleId"))
+  def selectById(roleId: Id[Role]): Query0[RoleRow] =
+    (selectRoleFragment ++ fr"WHERE r.id = $roleId")
       .query[RoleRow]
-      .option
 
-  def selectRoleRowsByIds(ids: NonEmptyList[Id[Role]]): ConnectionIO[List[RoleRow]] =
-    (selectRoleFragment ++ whereAnd(in(fr"r.id", ids)))
+  def selectByIds(roleIds: NonEmptyList[Id[Role]]): Query0[RoleRow] =
+    (selectRoleFragment ++ whereAnd(in(fr"r.id", roleIds)))
       .query[RoleRow]
-      .to[List]
 
-  def selectRoleRowsByFilter(filter: RoleFilter, pagination: Pagination): ConnectionIO[List[RoleRow]] =
-    SqlPagination.paginate[RoleRow](selectRoleFragment ++ filter.fragment, pagination)
-      .to[List]
+  def selectByFilter(filter: RoleFilter, pagination: Pagination): Query0[RoleRow] =
+    SqlPagination
+      .paginate[RoleRow](selectRoleFragment ++ filter.fragment, pagination)
 
-  def insertRole(role: Role): ConnectionIO[Id[Role]] =
+  def insert(roleRow: RoleRow): Update0 =
     sql"""
       INSERT INTO role (name, system, workspace_id)
-           VALUES (${role.name}, 
-                   ${role.system}, 
-                   ${role.workspace})
-    """
-      .update
-      .withUniqueGeneratedKeys[Id[Role]]("id")
+           VALUES (${roleRow.name}, 
+                   ${roleRow.system}, 
+                   ${roleRow.workspace})
+    """.update
 
-  def updateRole(role: Role): ConnectionIO[Int] =
+  def update(roleRow: RoleRow): Update0 =
     sql"""
       UPDATE role
-         SET name = ${role.name}
-       WHERE id = ${role.id}
-    """
-      .update
-      .run
+         SET name = ${roleRow.name}
+       WHERE id   = ${roleRow.id}
+    """.update
 
-  def deleteRole(roleId: Id[Role]): ConnectionIO[Int] =
+  def delete(roleId: Id[Role]): Update0 =
     sql"DELETE FROM role r WHERE r.id = $roleId"
       .update
-      .run
-
-  def selectRolePermissions(roleId: Id[Role]): ConnectionIO[List[Permission]] =
-    (selectRolePermissionsFragment
-      ++ whereAnd(fr"p.id IN (SELECT rp.permission_id FROM role_permission rp WHERE rp.role_id = $roleId)"))
-      .query[Permission]
-      .to[List]
-
-  def selectRolesPermissions(roleIds: NonEmptyList[Id[Role]]): ConnectionIO[List[(Id[Role], Permission)]] =
-    (fr"""
-      SELECT rp.role_id, p.id, p.name, p.scope
-        FROM permission p
-        JOIN role_permission rp ON p.id = rp.permission_id
-    """ ++ whereAnd(in(fr"rp.role_id", roleIds)))
-      .query[(Id[Role], Permission)]
-      .to[List]
-
-  def insertRolePermissions(roleId: Id[Role], permissions: NonEmptyList[Permission]): ConnectionIO[Int] =
-    val sql  = "INSERT INTO role_permission (role_id, permission_id) VALUES (?, ?)"
-    val rows = permissions.map(p => (roleId, p.id))
-
-    Update[RolePermissionRow](sql).updateMany(rows)
-
-  def deleteRolePermissions(roleId: Id[Role]): ConnectionIO[Int] =
-    sql"DELETE FROM role_permission rp WHERE rp.role_id = $roleId"
-      .update
-      .run
 
 end RoleQuery
