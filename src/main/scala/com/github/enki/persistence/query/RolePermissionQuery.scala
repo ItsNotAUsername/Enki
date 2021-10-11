@@ -4,8 +4,8 @@ package query
 
 import domain.Id
 import domain.permission.{Permission, Role}
-import meta.given
 import model.RolePermissionRow
+import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.{Query0, Update0, Update}

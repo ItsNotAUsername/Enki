@@ -6,11 +6,11 @@ import domain.{Id, Pagination, RoleName}
 import domain.permission.{Permission, Role, Scope}
 import domain.workspace.Workspace
 import filter.RoleFilter
-import meta.given
 import model.RoleRow
+import model.meta.given
 
-import cats.data.NonEmptyList
-import doobie.*
+import cats.data.NonEmptyList as NEL
+import doobie.{Query0, Update0}
 import doobie.implicits.*
 import doobie.util.fragments.{in, whereAnd}
 
@@ -25,7 +25,7 @@ private[persistence] object RoleQuery:
     (selectRoleFragment ++ fr"WHERE r.id = $roleId")
       .query[RoleRow]
 
-  def selectByIds(roleIds: NonEmptyList[Id[Role]]): Query0[RoleRow] =
+  def selectByIds(roleIds: NEL[Id[Role]]): Query0[RoleRow] =
     (selectRoleFragment ++ whereAnd(in(fr"r.id", roleIds)))
       .query[RoleRow]
 

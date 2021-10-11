@@ -4,8 +4,8 @@ package query
 
 import domain.{Email, Id}
 import domain.user.User
-import meta.given
 import model.UserRow
+import model.meta.given
 
 import doobie.{Query0, Update0}
 import doobie.implicits.*
@@ -14,18 +14,17 @@ import java.util.UUID
 
 private[persistence] object UserQuery:
 
-  private val selectFragment = 
-    fr"""
-      SELECT u.id, 
-             u.username, 
-             u.email, 
-             u.password, 
-             u.active, 
-             u.code, 
-             u.created, 
-             u.updated
-        FROM usr u
-    """
+  private val selectFragment = fr"""
+    SELECT u.id, 
+           u.username, 
+           u.email, 
+           u.password, 
+           u.active, 
+           u.code, 
+           u.created, 
+           u.updated
+      FROM usr u
+  """
 
   def selectById(id: Id[User]): Query0[UserRow] =
     (selectFragment ++ fr"WHERE u.id = $id")

@@ -1,5 +1,6 @@
 package com.github.enki
 package persistence
+package model
 
 import domain.Id
 
