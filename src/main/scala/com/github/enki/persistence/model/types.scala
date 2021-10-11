@@ -10,10 +10,31 @@ import domain.workspace.*
 import java.time.LocalDateTime
 import java.util.UUID
 
-type UserRow = Id[User] *: Username *: Email *: HashedPassword *: Boolean *: UUID *: LocalDateTime *: LocalDateTime *: EmptyTuple
+final case class UserRow(
+  id:       Id[User],
+  username: Username,
+  email:    Email,
+  password: HashedPassword,
+  active:   Boolean,
+  code:     UUID,
+  created:  LocalDateTime,
+  updated:  LocalDateTime
+)
 
-type PermissionRow = Id[Permission] *: PermissionName *: Scope *: EmptyTuple
+final case class PermissionRow(
+  id:    Id[Permission],
+  name:  PermissionName,
+  scope: Scope
+)
 
-type RoleRow = Id[Role] *: RoleName *: Boolean *: Option[Id[Workspace]] *: EmptyTuple
+final case class RoleRow(
+  id:        Id[Role],
+  name:      RoleName,
+  system:    Boolean,
+  workspace: Option[Id[Workspace]]
+)
 
-type RolePermissionRow = Id[Role] *: Id[Permission] *: EmptyTuple
+final case class RolePermissionRow(
+  roleId:       Id[Role],
+  permissionId: Id[Permission]
+)
