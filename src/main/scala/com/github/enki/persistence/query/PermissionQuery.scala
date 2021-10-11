@@ -5,9 +5,10 @@ package query
 import domain.Id
 import domain.permission.Permission
 import meta.given
+import model.PermissionRow
 
 import cats.data.NonEmptyList
-import doobie.*
+import doobie.Query0
 import doobie.implicits.*
 import doobie.util.fragments.{in, whereAnd}
 
@@ -19,15 +20,16 @@ private[persistence] object PermissionQuery:
         FROM permission p
     """
 
-  def selectPermissionById(id: Id[Permission]): Query0[Permission] =
-    (selectFragment ++ whereAnd(fr"p.id = $id"))
-      .query[Permission]
+  def selectById(id: Id[Permission]): Query0[PermissionRow] =
+    (selectFragment ++ fr"WHERE p.id = $id")
+      .query[PermissionRow]
 
-  def selectPermissionsByIds(ids: NonEmptyList[Id[Permission]]): Query0[Permission] =
+  def selectByIds(ids: NonEmptyList[Id[Permission]]): Query0[PermissionRow] =
     (selectFragment ++ whereAnd(in(fr"p.id", ids)))
-      .query[Permission]
+      .query[PermissionRow]
 
-  def selectAll: Query0[Permission] =
-    selectFragment.query[Permission]
+  def selectAll: Query0[PermissionRow] =
+    selectFragment
+      .query[PermissionRow]
 
 end PermissionQuery
