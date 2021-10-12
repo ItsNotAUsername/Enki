@@ -38,3 +38,15 @@ final case class RolePermissionRow(
   roleId:       Id[Role],
   permissionId: Id[Permission]
 )
+
+final case class RoleSchemeRow(
+  id:        Id[RoleScheme],
+  name:      RoleSchemeName,
+  system:    Boolean,
+  workspace: Option[Id[Workspace]]
+)
+
+final case class RoleSchemeRoleRow(
+  roleSchemeId: Id[RoleScheme],
+  roleId:       Id[Role]
+)
