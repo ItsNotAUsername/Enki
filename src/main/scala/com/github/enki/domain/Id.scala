@@ -1,6 +1,8 @@
 package com.github.enki
 package domain
 
+import cats.Order
+
 type Id[+T] = Id.Type[T]
 
 object Id:
@@ -23,5 +25,7 @@ object Id:
   def unsafeFrom[T](value: Long): Type[T] = 
     if validate(value) then value
     else throw new IllegalArgumentException(errorMsg)
+
+  given order4id[T]: Order[Id[T]] = Order.fromLessThan[Long](_ < _)
 
 end Id
