@@ -50,3 +50,14 @@ final case class RoleSchemeRoleRow(
   roleSchemeId: Id[RoleScheme],
   roleId:       Id[Role]
 )
+
+final case class MemberRow(
+  userId:      Id[User],
+  workspaceId: Id[Workspace],
+  roleId:      Id[Role],
+  name:        Username,
+  email:       Email,
+  status:      MemberStatus,
+  joined:      LocalDateTime,
+  updated:     LocalDateTime
+)

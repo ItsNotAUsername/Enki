@@ -4,6 +4,7 @@ package mapping
 
 import domain.permission.*
 import domain.user.*
+import domain.workspace.*
 import model.*
 
 import cats.data.NonEmptyList as NEL
@@ -71,4 +72,28 @@ extension (roleSchemeObject: RoleScheme.type)
     roleSchemeRow.system,
     roleSchemeRow.workspace,
     roles
+  )
+
+extension (member: Member)
+  def toRow: MemberRow = MemberRow(
+    member.userId,
+    member.workspaceId,
+    member.role.id,
+    member.name,
+    member.email,
+    member.status,
+    member.joined,
+    member.updated
+  )
+
+extension (memberObject: Member.type)
+  def fromRows(memberRow: MemberRow, role: Role): Member = Member(
+    memberRow.userId,
+    memberRow.workspaceId,
+    memberRow.name,
+    memberRow.email,
+    role,
+    memberRow.status,
+    memberRow.joined,
+    memberRow.updated
   )
