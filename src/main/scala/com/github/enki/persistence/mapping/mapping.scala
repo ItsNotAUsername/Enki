@@ -140,6 +140,7 @@ extension (labelObject: Label.type)
 extension (ticket: Ticket)
   def toRow: TicketRow = TicketRow(
     ticket.id,
+    ticket.workspaceId,
     ticket.name,
     ticket.summary,
     ticket.description,
@@ -158,6 +159,7 @@ extension (ticketObject: Ticket.type)
     assignee:  Option[Member]
   ): Ticket = Ticket(
     ticketRow.id,
+    ticketRow.workspaceId,
     ticketRow.name,
     ticketRow.summary,
     ticketRow.description,

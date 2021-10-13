@@ -79,6 +79,7 @@ final case class LabelRow(
 
 final case class TicketRow(
   id:          Id[Ticket],
+  workspaceId: Id[Workspace],
   name:        TicketName,
   summary:     TicketSummary,
   description: Option[TicketDescription],
@@ -87,4 +88,9 @@ final case class TicketRow(
   priority:    Priority,
   created:     LocalDateTime,
   updated:     LocalDateTime
+)
+
+final case class TicketLabelRow(
+  ticketId: Id[Ticket],
+  labelId:  Id[Label]
 )
