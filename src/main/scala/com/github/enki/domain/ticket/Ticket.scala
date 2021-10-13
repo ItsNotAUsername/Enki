@@ -2,7 +2,6 @@ package com.github.enki
 package domain
 package ticket
 
-import field.Priority
 import workspace.Member
 
 import java.time.LocalDateTime
