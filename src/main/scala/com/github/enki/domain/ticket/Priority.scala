@@ -1,7 +1,6 @@
 package com.github.enki
 package domain
 package ticket
-package field
 
 import util.enums.*
 
