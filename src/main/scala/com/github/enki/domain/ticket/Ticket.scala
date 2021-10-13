@@ -11,7 +11,7 @@ final case class Ticket(
   name:        TicketName,
   summary:     TicketSummary,
   description: Option[TicketDescription],
-  labels:      List[String],
+  labels:      List[Label],
   reporter:    Member,
   assignee:    Option[Member],
   priority:    Priority,

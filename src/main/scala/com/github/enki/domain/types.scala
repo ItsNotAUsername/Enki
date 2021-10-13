@@ -53,6 +53,10 @@ object TicketSummary extends Newtype[String, NonEmptyWithMaxSize[255]]
 type   TicketDescription = TicketDescription.Type
 object TicketDescription extends Newtype[String, NonEmptyWithMaxSize[65535]]
 
+// Label
+type   LabelName = LabelName.type
+object LabelName extends Newtype[String, NonEmptyWithMaxSize[31]]
+
 // Pagination
 type   Limit = Limit.Type
 object Limit extends Newtype[Int, Interval.Closed[1, 50]]
