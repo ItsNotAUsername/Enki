@@ -15,7 +15,7 @@ import util.ops.list.*
 import cats.syntax.all.*
 import doobie.ConnectionIO
 
-trait LiveMemberDao(roleDao: RoleDao) extends MemberDao:
+class LiveMemberDao(roleDao: RoleDao) extends MemberDao:
   import query.MemberQuery
 
   def insert(member: Member): ConnectionIO[Unit] =
