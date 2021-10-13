@@ -54,7 +54,7 @@ type   TicketDescription = TicketDescription.Type
 object TicketDescription extends Newtype[String, NonEmptyWithMaxSize[65535]]
 
 // Label
-type   LabelName = LabelName.type
+type   LabelName = LabelName.Type
 object LabelName extends Newtype[String, NonEmptyWithMaxSize[31]]
 
 // Pagination
