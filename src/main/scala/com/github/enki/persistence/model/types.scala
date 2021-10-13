@@ -61,3 +61,12 @@ final case class MemberRow(
   joined:      LocalDateTime,
   updated:     LocalDateTime
 )
+
+final case class WorkspaceRow(
+  id:           Id[Workspace],
+  name:         WorkspaceName,
+  ownerId:      Id[User],
+  roleSchemeId: Id[RoleScheme],
+  created:      LocalDateTime,
+  updated:      LocalDateTime
+)

@@ -97,3 +97,29 @@ extension (memberObject: Member.type)
     memberRow.joined,
     memberRow.updated
   )
+
+extension (workspace: Workspace)
+  def toRow: WorkspaceRow = WorkspaceRow(
+    workspace.id,
+    workspace.name,
+    workspace.owner.userId,
+    workspace.roleScheme.id,
+    workspace.created,
+    workspace.updated
+  )
+
+extension (workspaceObject: Workspace.type)
+  def fromRows(
+    workspaceRow: WorkspaceRow, 
+    owner:        Member, 
+    members:      NEL[Member], 
+    roleScheme:   RoleScheme
+  ): Workspace = Workspace(
+    workspaceRow.id,
+    workspaceRow.name,
+    owner,
+    members,
+    roleScheme,
+    workspaceRow.created,
+    workspaceRow.updated
+  )
