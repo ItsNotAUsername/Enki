@@ -4,6 +4,7 @@ package model
 
 import domain.*
 import domain.permission.*
+import domain.ticket.*
 import domain.user.*
 import domain.workspace.*
 
@@ -69,4 +70,21 @@ final case class WorkspaceRow(
   roleSchemeId: Id[RoleScheme],
   created:      LocalDateTime,
   updated:      LocalDateTime
+)
+
+final case class LabelRow(
+  id:   Id[Label],
+  name: LabelName,
+)
+
+final case class TicketRow(
+  id:          Id[Ticket],
+  name:        TicketName,
+  summary:     TicketSummary,
+  description: Option[TicketDescription],
+  reporterId:  Id[User],
+  assigneeId:  Option[Id[User]],
+  priority:    Priority,
+  created:     LocalDateTime,
+  updated:     LocalDateTime
 )

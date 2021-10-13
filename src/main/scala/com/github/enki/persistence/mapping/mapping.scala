@@ -3,6 +3,7 @@ package persistence
 package mapping
 
 import domain.permission.*
+import domain.ticket.*
 import domain.user.*
 import domain.workspace.*
 import model.*
@@ -122,4 +123,48 @@ extension (workspaceObject: Workspace.type)
     roleScheme,
     workspaceRow.created,
     workspaceRow.updated
+  )
+
+extension (label: Label)
+  def toRow: LabelRow = LabelRow(
+    label.id,
+    label.name
+  )
+
+extension (labelObject: Label.type)
+  def fromRow(labelRow: LabelRow): Label = Label(
+    labelRow.id,
+    labelRow.name
+  )
+
+extension (ticket: Ticket)
+  def toRow: TicketRow = TicketRow(
+    ticket.id,
+    ticket.name,
+    ticket.summary,
+    ticket.description,
+    ticket.reporter.userId,
+    ticket.assignee.map(_.userId),
+    ticket.priority,
+    ticket.created,
+    ticket.updated
+  )
+
+extension (ticketObject: Ticket.type)
+  def fromRows(
+    ticketRow: TicketRow, 
+    labels:    List[Label], 
+    reporter:  Member, 
+    assignee:  Option[Member]
+  ): Ticket = Ticket(
+    ticketRow.id,
+    ticketRow.name,
+    ticketRow.summary,
+    ticketRow.description,
+    labels,
+    reporter,
+    assignee,
+    ticketRow.priority,
+    ticketRow.created,
+    ticketRow.updated
   )
