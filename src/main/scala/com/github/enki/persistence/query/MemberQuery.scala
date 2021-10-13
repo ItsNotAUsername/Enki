@@ -40,6 +40,10 @@ private[persistence] object MemberQuery:
     (selectFragment ++ whereAnd(userFragment(userId), workspaceFragment(workspaceId)))
       .query[MemberRow]
 
+  def selectByIds(ids: NEL[(Id[User], Id[Workspace])]): Query0[MemberRow] =
+    (selectFragment ++ whereAnd(in(fr"(wm.user_id, wm.workspace_id)", ids)))
+      .query[MemberRow]
+
   def selectByWorkspaceId(workspaceId: Id[Workspace]): Query0[MemberRow] =
     (selectFragment ++ whereAnd(workspaceFragment(workspaceId)))
       .query[MemberRow]

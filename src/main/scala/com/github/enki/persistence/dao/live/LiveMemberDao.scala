@@ -10,8 +10,10 @@ import domain.workspace.{Member, Workspace}
 import filter.MemberFilter
 import mapping.*
 import model.MemberRow
+import util.ops.option.*
 import util.ops.list.*
 
+import cats.data.NonEmptyList as NEL
 import cats.syntax.all.*
 import doobie.ConnectionIO
 
@@ -33,10 +35,12 @@ class LiveMemberDao(roleDao: RoleDao) extends MemberDao:
   def findByIds(userId: Id[User], workspaceId: Id[Workspace]): ConnectionIO[Option[Member]] =
     for
       memberRow <- MemberQuery.selectById(userId, workspaceId).option
-      role      <- memberRow
-                     .fold(none.pure[ConnectionIO])(row => roleDao.findById(row.roleId))
+      role      <- memberRow.map(_.roleId).applyOrNone(roleDao.findById)
     yield
       (memberRow, role).mapN(Member.fromRows)
+
+  def findManyByIds(ids: NEL[(Id[User], Id[Workspace])]): ConnectionIO[List[Member]] =
+    MemberQuery.selectByIds(ids).to[List] >>= findMembers
 
   def findManyByWorkspaceId(workspaceId: Id[Workspace]): ConnectionIO[List[Member]] =
     MemberQuery.selectByWorkspaceId(workspaceId).to[List] >>= findMembers
