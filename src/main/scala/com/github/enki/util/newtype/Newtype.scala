@@ -6,6 +6,8 @@ import cats.Show
 import cats.syntax.either.*
 import doobie.{Get, Put}
 import eu.timepit.refined.api.{Failed, Passed, Validate}
+import pureconfig.ConfigReader
+import pureconfig.error.FailureReason
 
 abstract class Newtype[T, P](using validate: Validate[T, P]):
   opaque type Type = T
@@ -29,6 +31,9 @@ abstract class Newtype[T, P](using validate: Validate[T, P]):
     underlying.temap(from)
 
   given put4newtype(using underlying: Put[T], show: Show[T]): Put[Type] =
-    underlying.contramap(value) 
+    underlying.contramap(value)
+
+  given configReader4newtype(using underlying: ConfigReader[T]): ConfigReader[Type] =
+    underlying.emap { t => from(t).leftMap(s => new FailureReason { override def description = s } ) }
 
 end Newtype
