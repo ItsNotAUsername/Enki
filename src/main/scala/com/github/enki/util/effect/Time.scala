@@ -1,6 +1,6 @@
 package com.github.enki
 package util
-package typeclass
+package effect
 
 import cats.effect.Clock
 import java.time.{LocalDate, LocalDateTime, ZoneOffset}
