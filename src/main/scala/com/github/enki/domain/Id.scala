@@ -1,21 +1,18 @@
 package com.github.enki
 package domain
 
-import cats.Order
+import doobie.{Get, Put}
+import com.github.enki.domain.IdInstances
 
-type Id[+T] = Id.Type[T]
+type Id[T] = Id.Type[T]
 
-object Id:
-  opaque type Type[+T] = Long
+object Id extends IdInstances:
+  opaque type Type[T] = Long
 
   extension [T](t: Type[T])
     def value: Long = t
 
-  private val errorMsg: String = "Id must be positive integer"
-
-  private def validate(value: Long): Boolean = value > 0
-
-  val undefined: Type[Nothing] = 0
+  def undefined[T]: Type[T] = 0
 
   def apply[T](value: Long): Type[T] = unsafeFrom(value)
 
@@ -26,6 +23,17 @@ object Id:
     if validate(value) then value
     else throw new IllegalArgumentException(errorMsg)
 
-  given order4id[T]: Order[Id[T]] = Order.fromLessThan[Long](_ < _)
+  private val errorMsg: String = "Id must be positive integer"
+
+  private def validate(value: Long): Boolean = value > 0
 
 end Id
+
+private trait IdInstances:
+  self: Id.type =>
+
+  given doobieGet4id[T]: Get[Type[T]] = Get[Long].temap(from)
+
+  given doobiePut4id[T]: Put[Type[T]] = Put[Long].tcontramap(value)
+
+end IdInstances

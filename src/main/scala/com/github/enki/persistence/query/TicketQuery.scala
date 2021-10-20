@@ -8,7 +8,6 @@ import domain.user.User
 import domain.workspace.Workspace
 import filter.TicketFilter
 import model.TicketRow
-import model.meta.given
 
 import doobie.{Query0, Update0}
 import doobie.implicits.*

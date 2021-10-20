@@ -7,7 +7,6 @@ import domain.permission.{Permission, Role, Scope}
 import domain.workspace.Workspace
 import filter.RoleFilter
 import model.RoleRow
-import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.{Query0, Update0}

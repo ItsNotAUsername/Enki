@@ -6,7 +6,6 @@ package live
 import domain.{Email, Id}
 import domain.user.User
 import mapping.*
-import model.meta.given
 
 import cats.syntax.functor.*
 import doobie.ConnectionIO

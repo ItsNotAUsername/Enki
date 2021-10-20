@@ -6,7 +6,6 @@ import domain.{Id, Pagination}
 import domain.permission.RoleScheme
 import filter.RoleSchemeFilter
 import model.RoleSchemeRow
-import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.{Query0, Update0}

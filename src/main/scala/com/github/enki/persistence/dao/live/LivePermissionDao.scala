@@ -6,7 +6,6 @@ package live
 import domain.Id
 import domain.permission.Permission
 import mapping.*
-import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.*

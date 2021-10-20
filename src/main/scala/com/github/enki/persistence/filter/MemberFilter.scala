@@ -5,7 +5,6 @@ package filter
 import domain.{Id, Username}
 import domain.permission.Permission
 import domain.workspace.*
-import model.meta.given
 
 import cats.syntax.list.*
 import doobie.Fragment

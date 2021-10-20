@@ -4,7 +4,6 @@ package filter
 
 import domain.{Id, RoleSchemeName}
 import domain.workspace.Workspace
-import model.meta.given
 
 import doobie.Fragment
 import doobie.implicits.*

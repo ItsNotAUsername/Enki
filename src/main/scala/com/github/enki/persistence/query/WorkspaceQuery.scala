@@ -6,7 +6,6 @@ import domain.{Id, Pagination}
 import domain.user.User
 import domain.workspace.Workspace
 import model.WorkspaceRow
-import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.{Query0, Update0}

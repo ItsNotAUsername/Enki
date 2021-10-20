@@ -10,7 +10,6 @@ import domain.workspace.{Member, Workspace}
 import filter.TicketFilter
 import mapping.*
 import model.{TicketLabelRow, TicketRow}
-import model.meta.given
 import util.ops.list.*
 import util.ops.option.*
 

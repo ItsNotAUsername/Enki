@@ -5,7 +5,6 @@ package query
 import domain.Id
 import domain.ticket.{Label, Ticket}
 import model.TicketLabelRow
-import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.{Query0, Update0, Update}

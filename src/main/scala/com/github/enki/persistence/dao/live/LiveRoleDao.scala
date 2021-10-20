@@ -8,7 +8,6 @@ import domain.permission.{Permission, Role}
 import filter.RoleFilter
 import mapping.*
 import model.{RolePermissionRow, RoleRow}
-import model.meta.given
 import util.ops.list.*
 
 import cats.data.NonEmptyList as NEL

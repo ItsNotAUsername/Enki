@@ -7,7 +7,6 @@ import domain.user.User
 import domain.workspace.{Member, Workspace}
 import filter.MemberFilter
 import model.MemberRow
-import model.meta.given
 
 import cats.data.NonEmptyList as NEL
 import doobie.{Query0, Update0}

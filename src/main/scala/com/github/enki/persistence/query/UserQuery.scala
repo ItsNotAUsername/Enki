@@ -5,7 +5,6 @@ package query
 import domain.{Email, Id}
 import domain.user.User
 import model.UserRow
-import model.meta.given
 
 import doobie.{Query0, Update0}
 import doobie.implicits.*
